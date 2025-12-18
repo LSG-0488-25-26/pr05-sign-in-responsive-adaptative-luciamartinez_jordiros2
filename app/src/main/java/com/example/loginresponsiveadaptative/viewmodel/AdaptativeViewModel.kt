@@ -1,5 +1,6 @@
 package com.example.loginresponsiveadaptative.viewmodel
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -17,9 +18,8 @@ class AdaptativeViewModel: ViewModel() {
     ): Boolean {
         if (name == "" || birth == "" || email == "" || phone_text == "" || username == "" || password == "" || confirmPassword == "") {
             return true
-        } else {
-            return false
         }
+        return false
     }
 
     fun formatoFecha(birth: String): Boolean {
@@ -32,5 +32,16 @@ class AdaptativeViewModel: ViewModel() {
         } catch (e: ParseException) {
             true
         }
+    }
+
+    fun formatoCorreo(email: String): Boolean {
+        return !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun verificarContrasenya(password: String, confirmPassword: String): Boolean {
+        if (password != confirmPassword) {
+            return true
+        }
+        return false
     }
 }
