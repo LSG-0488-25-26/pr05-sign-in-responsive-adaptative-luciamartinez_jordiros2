@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+LoginView.kt
+SigninView.kt
