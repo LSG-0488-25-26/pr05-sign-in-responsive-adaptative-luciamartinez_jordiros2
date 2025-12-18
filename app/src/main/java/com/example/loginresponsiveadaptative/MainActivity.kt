@@ -19,9 +19,8 @@ import com.example.loginresponsiveadaptative.view.SigninView
 import com.example.loginresponsiveadaptative.viewmodel.AdaptativeViewModel
 import kotlin.getValue
 
-
 class MainActivity : ComponentActivity() {
-    val loginViewModel: AdaptativeViewModel by viewModels<AdaptativeViewModel>()
+    val adaptativeViewModel: AdaptativeViewModel by viewModels<AdaptativeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +33,8 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = Routes.Login.route
                     ) {
-                        composable(Routes.Login.route) { LoginView(modifier = Modifier.padding(innerPadding), loginViewModel, navController) }
-                        composable(Routes.Signin.route) { SigninView(modifier = Modifier.padding(innerPadding), loginViewModel, navController) }
+                        composable(Routes.Login.route) { LoginView(modifier = Modifier.padding(innerPadding), adaptativeViewModel, navController) }
+                        composable(Routes.Signin.route) { SigninView(modifier = Modifier.padding(innerPadding), adaptativeViewModel, navController) }
                     }
                 }
             }
