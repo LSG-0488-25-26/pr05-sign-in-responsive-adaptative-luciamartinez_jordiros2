@@ -1,6 +1,7 @@
 package com.example.loginresponsiveadaptative.viewmodel
 
 import android.util.Patterns
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -36,6 +37,13 @@ class AdaptativeViewModel: ViewModel() {
 
     fun formatoCorreo(email: String): Boolean {
         return !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun formatoTelefono(phone_text: String): Boolean {
+        if (phone_text.length != 9 || !phone_text.isDigitsOnly()) {
+            return true
+        }
+        return false
     }
 
     fun verificarContrasenya(password: String, confirmPassword: String): Boolean {
