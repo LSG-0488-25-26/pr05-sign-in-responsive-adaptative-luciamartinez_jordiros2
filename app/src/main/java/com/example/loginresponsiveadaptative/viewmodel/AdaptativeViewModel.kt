@@ -1,6 +1,9 @@
 package com.example.loginresponsiveadaptative.viewmodel
 
 import androidx.lifecycle.ViewModel
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AdaptativeViewModel: ViewModel() {
     fun camposCompletos (
@@ -20,6 +23,14 @@ class AdaptativeViewModel: ViewModel() {
     }
 
     fun formatoFecha(birth: String): Boolean {
+        val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        formato.isLenient = false
 
+        return try {
+            formato.parse(birth)
+            false
+        } catch (e: ParseException) {
+            true
+        }
     }
 }
