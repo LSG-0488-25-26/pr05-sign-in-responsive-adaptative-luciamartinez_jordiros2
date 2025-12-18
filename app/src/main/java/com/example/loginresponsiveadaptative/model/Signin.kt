@@ -1,3 +1,13 @@
 package com.example.loginresponsiveadaptative.model
 
-data class Signin()
+import java.util.Date
+
+data class Signin(
+    var name: String,
+    var birth: Date,
+    var email: String,
+    var phone: Int,
+    var password: String,
+    var confirmPassword: String,
+    var conditions: Boolean
+)
