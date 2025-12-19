@@ -5,7 +5,7 @@ data class User(
     var birth: String,
     var email: String,
     var phone: Int,
-    val userName: String,
+    val username: String,
     var password: String,
     var confirmPassword: String,
     var conditions: Boolean
