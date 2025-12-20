@@ -22,16 +22,31 @@ class AdaptativeViewModel: ViewModel() {
         false
     )
 
-    fun insertarComponentes(
-        name: String,
-        birth: String,
-        email: String,
-        phone: Int,
-        username: String,
-        password: String,
-        confirmPassword: String,
-        conditions: Boolean
-    ) {
+    fun insertarComponentesLogin(email: String, password: String) {
+        val currentLogin = _valorUser.value
+        _valorUser.value = currentLogin.copy(
+            email = email,
+            password = password
+        )
+    }
+
+    fun camposCompletosLogin(): Boolean {
+        val currentLogin = _valorUser.value
+        if (currentLogin.email == "" || currentLogin.password == "") {
+            return false
+        }
+        return true
+    }
+
+    fun verificarUsuarioLogin(): Boolean {
+        val currentLogin = _valorUser.value
+        if (currentLogin.email == usuarioRegistrado.email && currentLogin.password == usuarioRegistrado.password) {
+            return true
+        }
+        return false
+    }
+
+    fun insertarComponentesSignin(name: String, birth: String, email: String, phone: Int, username: String, password: String, confirmPassword: String, conditions: Boolean) {
         val currentSignin = _valorUser.value
         _valorUser.value = currentSignin.copy(
             name = name,
@@ -45,31 +60,15 @@ class AdaptativeViewModel: ViewModel() {
         )
     }
 
-    fun camposCompletosLogin(email: String, password: String) {
-        val currentLogin = _valorUser.value
-        _valorUser.value = currentLogin.copy(
-            email = email,
-            password = password
-        )
-    }
-
-    fun verificarUsuarioLogin(): Boolean {
-        var currentLogin = _valorUser.value
-        if (currentLogin.email == usuarioRegistrado.email && currentLogin.password == usuarioRegistrado.password) {
-            return false
-        }
-        return true
-    }
-
     fun camposCompletosSignin(): Boolean {
         val currentSignin = _valorUser.value
-        if (currentSignin.name == null ||
-            currentSignin.birth == null ||
-            currentSignin.email == null ||
-            currentSignin.phone == null ||
-            currentSignin.username == null ||
-            currentSignin.password == null ||
-            currentSignin.confirmPassword == null) {
+        if (currentSignin.name == "" ||
+            currentSignin.birth == "" ||
+            currentSignin.email == "" ||
+            currentSignin.username == "" ||
+            currentSignin.password == "" ||
+            currentSignin.confirmPassword == ""
+        ) {
             return true
         }
         return false
