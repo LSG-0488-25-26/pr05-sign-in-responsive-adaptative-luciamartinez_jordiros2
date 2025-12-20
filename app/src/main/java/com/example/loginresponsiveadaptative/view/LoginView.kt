@@ -9,12 +9,12 @@ import com.example.loginresponsiveadaptative.nav.Routes
 import com.example.loginresponsiveadaptative.viewmodel.AdaptativeViewModel
 
 @Composable
-fun SigninView(modifier: Modifier, loginViewModel: AdaptativeViewModel, navController: NavController) {
+fun LoginView(modifier: Modifier, loginViewModel: AdaptativeViewModel, navController: NavController) {
     Button(
         onClick =  {
-            navController.navigate(Routes.Login.route)
+            navController.navigate(Routes.Signin.route)
         }
     ) {
-        Text(text = "<Atras")
+        Text(text = "Crear cuenta")
     }
 }
