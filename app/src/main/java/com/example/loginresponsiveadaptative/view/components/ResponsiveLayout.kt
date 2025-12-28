@@ -4,131 +4,109 @@ import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.window.layout.WindowSizeClass
-// Ancho
-import androidx.window.layout.WindowWidthSizeClass
-// Alto
-import androidx.window.layout.WindowHeightSizeClass
-import androidx.window.layout.computeWindowSizeClass
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.window.layout.WindowMetricsCalculator
 
 // Orientación (vetrical u horizonatal): ADAPTATIVE
 enum class ScreenOrientation { PORTRAIT, LANDSCAPE }
 
 // Data class que combina orientación y tamaño
 // Guarda: ancho, alto y orientación
-data class ScreenInfo(
-    val widthClass: WindowWidthSizeClass,
-    val heightClass: WindowHeightSizeClass,
+data class WindowInfo(
+    // Ancho en dp: RESPONSIVE
+    val width: Dp,
+    // Alto en dp: RESPONSIVE
+    val height: Dp,
+    // Orientación: ADAPTATIVE
     val orientation: ScreenOrientation
 )
 
-// Clasificación como el pdf del Raimón (para nosotros que somos cortitos)
-// Definidos en la función: getDeviceLayout()
-enum class DeviceLayout {
-    PHONE_PORTRAIT,         // COMPACT × COMPACT, Portrait
-    PHONE_LANDSCAPE,        // MEDIUM × COMPACT, Landscape
-    TABLET_SMALL,           // MEDIUM × MEDIUM
-    TABLET_LARGE_PORTRAIT,  // EXPANDED × MEDIUM, Portrait
-    TABLET_LARGE_LANDSCAPE, // EXPANDED × MEDIUM, Landscape
-    DESKTOP                 // EXPANDED × EXPANDED
-}
-
-// Calcular WindowSizeClass
-// Función comoposable para ejecutarse con y basada en la UI
+// Obtener tamaño + orientación
 @Composable
-fun calculateWindowSizeClass(): WindowSizeClass {
-    // Obtener el 'context' (info de la app) para pasarlo a la función oficial de Google,
-    // si no no furula
+fun getWindowInfo(): WindowInfo {
+    // Obtener context (info de app)
     val context = LocalContext.current
-    // Obtener en formato estandar, no manualmente, en las unidades y umbrales correctos de las ventanas
-    return computeWindowSizeClass(context)
-}
 
-// Función que calcula TODO
-@Composable
-fun getScreenInfo(): ScreenInfo {
-    // Calcular tamaño width y height: COMPACT, MEDIUM, EXPANDED
-    val windowSizeClass = calculateWindowSizeClass()
+    // Medir ventana (RESPONSIVE) con la función de Google
+    val windowMetrics = WindowMetricsCalculator.getOrCreate()
+        // Devolver objeto con la info en pixeles
+        .computeCurrentWindowMetrics(context)
 
-    // Calcular orientación: PORTRAIT, LANDSCAPE
-    // LocalConfiguration.current --> te da la orientación actual
+    // Solo las medidas alto y ancho en pixeles
+    val widthPx = windowMetrics.bounds.width().toFloat()
+    val heightPx = windowMetrics.bounds.height().toFloat()
+    // Cada pantalla tiene diferente densidad (más/menos píxeles por cm)
+    // Para saber los DP --> es lo utilizado estándar
+    // Más densidad, más calidad
+    val density = context.resources.displayMetrics.density
+
+    // Convertir píxeles a dp
+    val widthDp = (widthPx / density).dp
+    val heightDp = (heightPx / density).dp
+
+    // Determinar orientación: ADAPTATIVE
+    // ¿Cuál es la configuración actual del dispositivo?
     val configuration = LocalConfiguration.current
-    // Si horizontal/landscape:
+    // Si horizontal/Landscape:
     val orientation = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        // Guardar horizontal
+        // Orientación = horizontal
         ScreenOrientation.LANDSCAPE
     // Si no:
     } else {
-        // Guardar vertical
+        // Orientación = vertical
         ScreenOrientation.PORTRAIT
     }
-
-    // Devolver info junta en un objeto
-    return ScreenInfo(
-        widthClass = windowSizeClass.widthSizeClass,
-        heightClass = windowSizeClass.heightSizeClass,
-        orientation = orientation
-    )
+    // Todo junto
+    return WindowInfo(widthDp, heightDp, orientation)
 }
 
-// Traducir a nuestra clasificación decalarada en el enum DeviceLayout
+// Padding: RESPONSIVE
 @Composable
-fun getDeviceLayout(): DeviceLayout {
-    // Utilizar nuestra función de info como un objeto
-    val screenInfo = getScreenInfo()
-
-    // Teléfono vertical: COMPACT × COMPACT, Portrait
-    if (screenInfo.widthClass == WindowWidthSizeClass.COMPACT &&
-        screenInfo.heightClass == WindowHeightSizeClass.COMPACT &&
-        screenInfo.orientation == ScreenOrientation.PORTRAIT) {
-        // Si el objeto actual cumple con las características de este caso,
-        // devuele el caso
-        return DeviceLayout.PHONE_PORTRAIT
+fun responsivePadding(): Dp {
+    val windowInfo = getWindowInfo()
+    return when {
+        windowInfo.width < 360.dp -> 12.dp   // Móvil muy pequeño
+        windowInfo.width < 480.dp -> 16.dp   // Móvil normal
+        windowInfo.width < 600.dp -> 20.dp   // Móvil grande
+        windowInfo.width < 840.dp -> 24.dp   // Tablet
+        else -> 32.dp                        // Desktop
     }
+}
 
-    // Teléfono horizontal: MEDIUM × COMPACT, Landscape
-    if (screenInfo.widthClass == WindowWidthSizeClass.MEDIUM &&
-        screenInfo.heightClass == WindowHeightSizeClass.COMPACT &&
-        screenInfo.orientation == ScreenOrientation.LANDSCAPE) {
-        // Si el objeto actual cumple con las características de este caso,
-        // devuele el caso
-        return DeviceLayout.PHONE_LANDSCAPE
+// Tamaño de icono: RESPONSIVE
+@Composable
+fun responsiveIconSize(): Dp {
+    val windowInfo = getWindowInfo()
+    return when {
+        windowInfo.width < 400.dp -> 24.dp   // Móvil pequeño
+        windowInfo.width < 600.dp -> 32.dp   // Móvil
+        windowInfo.width < 840.dp -> 40.dp   // Tablet
+        else -> 48.dp                        // Desktop
     }
+}
 
-    // Tablet pequeña / Foldable: MEDIUM × MEDIUM
-    if (screenInfo.widthClass == WindowWidthSizeClass.MEDIUM &&
-        screenInfo.heightClass == WindowHeightSizeClass.MEDIUM) {
-        // Si el objeto actual cumple con las características de este caso,
-        // devuele el caso
-        return DeviceLayout.TABLET_SMALL
+// Tamaño base para texto: RESPONSIVE
+@Composable
+fun responsiveTextSize(): Dp {
+    val windowInfo = getWindowInfo()
+    return when {
+        windowInfo.width < 400.dp -> 14.dp   // Móvil pequeño
+        windowInfo.width < 600.dp -> 16.dp   // Móvil
+        windowInfo.width < 840.dp -> 18.dp   // Tablet
+        else -> 20.dp                        // Desktop
     }
+}
 
-    // Tablet grande vertical: EXPANDED × MEDIUM, Portrait
-    if (screenInfo.widthClass == WindowWidthSizeClass.EXPANDED &&
-        screenInfo.heightClass == WindowHeightSizeClass.MEDIUM &&
-        screenInfo.orientation == ScreenOrientation.PORTRAIT) {
-        // Si el objeto actual cumple con las características de este caso,
-        // devuele el caso
-        return DeviceLayout.TABLET_LARGE_PORTRAIT
+// Porcentaje de ancho para componentes: RESPONSIVE
+@Composable
+fun responsiveWidthFraction(): Float {
+    val windowInfo = getWindowInfo()
+    return when {
+        windowInfo.width < 400.dp -> 1.0f    // 100% en móvil pequeño
+        windowInfo.width < 600.dp -> 0.9f    // 90% en móvil
+        windowInfo.width < 840.dp -> 0.7f    // 70% en tablet
+        else -> 0.5f                         // 50% en desktop
     }
-
-    // Tablet grande horizontal: EXPANDED × MEDIUM, Landscape
-    if (screenInfo.widthClass == WindowWidthSizeClass.EXPANDED &&
-        screenInfo.heightClass == WindowHeightSizeClass.MEDIUM &&
-        screenInfo.orientation == ScreenOrientation.LANDSCAPE) {
-        // Si el objeto actual cumple con las características de este caso,
-        // devuele el caso
-        return DeviceLayout.TABLET_LARGE_LANDSCAPE
-    }
-
-    // Desktop: EXPANDED × EXPANDED
-    if (screenInfo.widthClass == WindowWidthSizeClass.EXPANDED &&
-        screenInfo.heightClass == WindowHeightSizeClass.EXPANDED) {
-        // Si el objeto actual cumple con las características de este caso,
-        // devuele el caso
-        return DeviceLayout.DESKTOP
-    }
-
-    // Caso por defecto (no tendría que pasar): teléfono vertical
-    return DeviceLayout.PHONE_PORTRAIT
 }
