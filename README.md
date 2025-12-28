@@ -32,12 +32,12 @@ Aplicación Android desarrollada en **Kotlin con Jetpack Compose** que implement
 ### 📗 **Vista Vertical (Portrait)**
 | Login | Registro | Confirmación |
 |-------|----------|--------------|
-| <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/login_portrait.jpeg" width="200"> | <img src="screenshots/signin_portrait.jpeg" width="200"> | <img src="screenshots/confirmation_portrait.jpeg" width="200"> |
+| <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/login_portrait.jpeg" width="200"> | <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/signin_portrait.jpeg" width="200"> | <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/confirmation_portrait.jpeg" width="200"> |
 
 ### 📗 **Vista Horizontal (Landscape)**
 | Login | Registro | Confirmación |
 |-------|----------|--------------|
-| <img src="screenshots/login_landscape.jpeg" width="400"> | <img src="screenshots/signin_landscape.jpeg" width="400"> | <img src="screenshots/confirmation_landscape.jpeg" width="400"> |
+| <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/login_landscape.jpeg" width="400"> | <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/signin_landscape.jpeg" width="400"> | <img src="app/src/main/java/com/example/loginresponsiveadaptative/screenshots/confirmation_landscape.jpeg" width="400"> |
 
 ## 📖 Estructura del proyecto
 ```
