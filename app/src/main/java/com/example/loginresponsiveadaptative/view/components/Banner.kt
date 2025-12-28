@@ -2,14 +2,15 @@ package com.example.loginresponsiveadaptative.view.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.LibraryBooks
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 // Cambiar banner automáticamente cuando se gire el dispositivo
@@ -22,7 +23,7 @@ fun BibliotecaBanner() {
     // Si vertical --> banner horizontal arriba
     if (windowInfo.orientation == ScreenOrientation.PORTRAIT) {
         BannerParaVertical(windowInfo.width)
-    // Si no --> banner vertical lateral
+        // Si no --> banner vertical lateral
     } else {
         BannerParaHorizontal(windowInfo.width)
     }
@@ -42,8 +43,8 @@ private fun BannerParaVertical(screenWidth: Dp) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            // Libro simple como icono
-            Icons.Default.Book,
+            // Estrella como icono
+            Icons.Filled.Star,
             // Texto para accesibilidad (lectores de pantalla)
             contentDescription = "Logo Biblioteca",
             // Tamaño fijo de 32dp
@@ -96,7 +97,8 @@ private fun BannerParaHorizontal(screenWidth: Dp) {
     ) {
         // Biblioteca como icono
         Icon(
-            Icons.Default.LibraryBooks,
+            // Corazón como icono
+            Icons.Filled.Favorite,
             // Texto para accesibilidad (lectores de pantalla)
             contentDescription = "Logo Biblioteca Digital",
             // Tamaño fijo de 48dp, más grande porque es un lateral
