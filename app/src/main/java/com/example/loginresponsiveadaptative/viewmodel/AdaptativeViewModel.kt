@@ -12,7 +12,7 @@ class AdaptativeViewModel: ViewModel() {
     private val _valorUser = MutableLiveData(User("", "", "", 0, "", "", "", false))
 
     // USUARIO FICTICIO PARA SIMULAR UNA BASE DE DATOS
-    var usuarioRegistrado = User(
+    private val usuarioRegistrado = User(
         "Jordi Ros López",
         "31/08/2001",
         "jorgex1412@gmail.com",
@@ -20,40 +20,33 @@ class AdaptativeViewModel: ViewModel() {
         "Darky12",
         "12345",
         "12345",
-        false
+        true
     )
 
     // INTRODUCE LOS DATOS DE LOGIN EN EL MODELO USER
     fun insertarComponentesLogin(email: String, password: String) {
-        val currentLogin = _valorUser.value
-        _valorUser.value = currentLogin.copy(
+        _valorUser.value = _valorUser.value?.copy(
             email = email,
             password = password
         )
     }
 
-    // RETORNA FALSE SI LOS DATOS DE LOGIN ESTAN INCOMPLETOS
+    // RETORNA TRUE SI LOS DATOS DE LOGIN ESTAN COMPLETOS
     fun camposCompletosLogin(): Boolean {
         val currentLogin = _valorUser.value
-        if (currentLogin.email == "" || currentLogin.password == "") {
-            return false
-        }
-        return true
+        return !(currentLogin?.email.isNullOrEmpty() || currentLogin?.password.isNullOrEmpty())
     }
 
-    // RETORNA FALSE SI EL CORREO Y LA CONTRASEÑA DE LOGIN COHINCIDEN CON EL USUARIO REGISTRADO
+    // RETORNA TRUE SI EL LOGIN ES CORRECTO
     fun verificarUsuarioLogin(): Boolean {
         val currentLogin = _valorUser.value
-        if (currentLogin.email != usuarioRegistrado.email || currentLogin.password != usuarioRegistrado.password) {
-            return false
-        }
-        return true
+        return currentLogin?.email == usuarioRegistrado.email &&
+                currentLogin?.password == usuarioRegistrado.password
     }
 
     // INTRODUCE LOS DATOS DE SIGNIN EN EL MODELO USER
     fun insertarComponentesSignin(name: String, birth: String, email: String, phone: Int, username: String, password: String, confirmPassword: String, conditions: Boolean) {
-        val currentSignin = _valorUser.value
-        _valorUser.value = currentSignin.copy(
+        _valorUser.value = _valorUser.value?.copy(
             name = name,
             birth = birth,
             email = email,
@@ -65,47 +58,53 @@ class AdaptativeViewModel: ViewModel() {
         )
     }
 
-    // RETORNA FALSE SI LOS DATOS DE SIGNIN ESTAN INCOMPLETOS
-    fun camposCompletosSignin(): Boolean {
+    // RETORNA TRUE SI LOS DATOS DE SIGNIN ESTAN INCOMPLETOS
+    fun hayCamposVaciosSignin(): Boolean {
         val currentSignin = _valorUser.value
-        if (currentSignin.name == "" ||
-            currentSignin.birth == "" ||
-            currentSignin.email == "" ||
-            currentSignin.username == "" ||
-            currentSignin.password == "" ||
-            currentSignin.confirmPassword == ""
-        ) {
-            return true
-        }
-        return false
+        return currentSignin?.name.isNullOrEmpty() ||
+                currentSignin?.birth.isNullOrEmpty() ||
+                currentSignin?.email.isNullOrEmpty() ||
+                currentSignin?.username.isNullOrEmpty() ||
+                currentSignin?.password.isNullOrEmpty() ||
+                currentSignin?.confirmPassword.isNullOrEmpty()
     }
 
-    // RETORNA FALSE SI EL FORMATO DE FECHA ES INVÁLIDO
-    fun formatoFecha(): Boolean {
+    // RETORNA TRUE SI EL FORMATO DE FECHA ES INVÁLIDO
+    fun fechaEsInvalida(): Boolean {
         val currentSignin = _valorUser.value
         val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         formato.isLenient = false
 
         return try {
-            formato.parse(currentSignin.birth)
+            formato.parse(currentSignin?.birth ?: "")
             false
         } catch (e: ParseException) {
             true
         }
     }
 
-    // RETORNA FALSE SI EL FORMATO CORREO ES INVÁLIDO
-    fun formatoCorreo(): Boolean {
+    // RETORNA TRUE SI EL FORMATO CORREO ES INVÁLIDO
+    fun emailEsInvalido(): Boolean {
         val currentSignin = _valorUser.value
-        return !Patterns.EMAIL_ADDRESS.matcher(currentSignin.email).matches()
+        return !Patterns.EMAIL_ADDRESS.matcher(currentSignin?.email ?: "").matches()
     }
 
-    // RETIRNA UN FALSE SI LAS CONTRASEÑAS NO COHINCIDEN
-    fun verificarContrasenya(): Boolean {
+    // RETORNA TRUE SI LAS CONTRASEÑAS NO COINCIDEN
+    fun contrasenyasNoCoinciden(): Boolean {
         val currentSignin = _valorUser.value
-        if (currentSignin.password != currentSignin.confirmPassword) {
-            return true
+        return currentSignin?.password != currentSignin?.confirmPassword
+    }
+
+    // FUNCIÓN EXTRA PARA VALIDAR TODO EL REGISTRO
+    fun validarRegistroCompleto(): String {
+        return when {
+            hayCamposVaciosSignin() -> "Completa todos los campos"
+            fechaEsInvalida() -> "Fecha inválida (dd/mm/yyyy)"
+            emailEsInvalido() -> "Email inválido"
+            contrasenyasNoCoinciden() -> "Las contraseñas no coinciden"
+            _valorUser.value?.conditions != true -> "Acepta los términos y condiciones"
+            (_valorUser.value?.password?.length ?: 0) < 5 -> "Contraseña muy corta (mínimo 5)"
+            else -> "OK"
         }
-        return false
     }
 }
