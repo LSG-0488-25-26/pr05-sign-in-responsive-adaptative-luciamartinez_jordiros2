@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Routes.Login.route) { LoginView(modifier = Modifier.padding(innerPadding), adaptativeViewModel, navController) }
                         composable(Routes.Signin.route) { SigninView(modifier = Modifier.padding(innerPadding), adaptativeViewModel, navController) }
-                        composable(Routes.Confirmation.route) { ConfirmationView(modifier = Modifier.padding(innerPadding) }
+                        composable(Routes.Confirmation.route) { ConfirmationView(modifier = Modifier.padding(innerPadding), navController = navController }
                     }
                 }
             }
