@@ -149,32 +149,19 @@ fun SigninView(
 
             OutlinedButton(
                 onClick = {
-                    // Convertir teléfono a número
-                    val telefonoNum = try {
-                        telefono.toInt()
-                    } catch (e: Exception) {
-                        0
-                    }
+                    val telefonoNum = try { telefono.toInt() } catch (e: Exception) { 0 }
 
-                    // Meter datos en ViewModel
                     viewModel.insertarComponentesSignin(
                         nombre, fecha, email, telefonoNum, usuario, password, confirmar, condiciones
                     )
 
-                    // Validar paso a paso
-                    if (viewModel.hayCamposVaciosSignin()) {
-                        mensajeError = "Completa todos los campos"
-                    } else if (viewModel.fechaEsInvalida()) {
-                        mensajeError = "Fecha inválida (dd/mm/yyyy)"
-                    } else if (viewModel.emailEsInvalido()) {
-                        mensajeError = "Email inválido"
-                    } else if (viewModel.contrasenyasNoCoinciden()) {
-                        mensajeError = "Las contraseñas no coinciden"
-                    } else if (!condiciones) {
-                        mensajeError = "Acepta los términos"
-                    } else {
+                    val resultado = viewModel.validarRegistroCompleto()
+
+                    if (resultado == "OK") {
                         mensajeError = "¡Registro exitoso!"
                         navController.navigate(Routes.Confirmation.route)
+                    } else {
+                        mensajeError = resultado
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -183,7 +170,7 @@ fun SigninView(
             }
         }
     } else {
-        // HORIZONTAL - similar pero con Row
+        // HORIZONTAL
         Row(modifier = modifier.fillMaxSize()) {
             Box(modifier = Modifier.weight(0.3f).fillMaxHeight()) {
                 BibliotecaBanner()
