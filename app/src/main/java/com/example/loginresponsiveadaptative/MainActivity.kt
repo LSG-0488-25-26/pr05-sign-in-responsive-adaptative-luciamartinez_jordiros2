@@ -14,10 +14,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.loginresponsiveadaptative.nav.Routes
 import com.example.loginresponsiveadaptative.ui.theme.LoginResponsiveAdaptativeTheme
+import com.example.loginresponsiveadaptative.view.ConfirmationView
 import com.example.loginresponsiveadaptative.view.LoginView
 import com.example.loginresponsiveadaptative.view.SigninView
 import com.example.loginresponsiveadaptative.viewmodel.AdaptativeViewModel
-import kotlin.getValue
 
 class MainActivity : ComponentActivity() {
     val adaptativeViewModel: AdaptativeViewModel by viewModels<AdaptativeViewModel>()
@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Routes.Login.route) { LoginView(modifier = Modifier.padding(innerPadding), adaptativeViewModel, navController) }
                         composable(Routes.Signin.route) { SigninView(modifier = Modifier.padding(innerPadding), adaptativeViewModel, navController) }
+                        composable(Routes.Confirmation.route) { ConfirmationView(modifier = Modifier.padding(innerPadding) }
                     }
                 }
             }
