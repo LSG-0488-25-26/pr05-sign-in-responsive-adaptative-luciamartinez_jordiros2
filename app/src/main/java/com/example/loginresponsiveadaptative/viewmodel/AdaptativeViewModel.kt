@@ -95,12 +95,19 @@ class AdaptativeViewModel: ViewModel() {
         return currentSignin?.password != currentSignin?.confirmPassword
     }
 
+    fun telefonoEsInvalido(): Boolean {
+        val currentSignin = _valorUser.value
+        val telefono = currentSignin?.phone ?: 0
+        return telefono <= 0 || telefono.toString().length < 9
+    }
+
     // FUNCIÓN EXTRA PARA VALIDAR TODO EL REGISTRO
     fun validarRegistroCompleto(): String {
         return when {
             hayCamposVaciosSignin() -> "Completa todos los campos"
             fechaEsInvalida() -> "Fecha inválida (dd/mm/yyyy)"
             emailEsInvalido() -> "Email inválido"
+            telefonoEsInvalido() -> "Teléfono inválido (mínimo 9 dígitos)"
             contrasenyasNoCoinciden() -> "Las contraseñas no coinciden"
             _valorUser.value?.conditions != true -> "Acepta los términos y condiciones"
             (_valorUser.value?.password?.length ?: 0) < 5 -> "Contraseña muy corta (mínimo 5)"
