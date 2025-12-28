@@ -10,6 +10,7 @@ Aplicación Android desarrollada en **Kotlin con Jetpack Compose** que implement
 
 ### 📗 **Adaptative Layout**
 - Diseños diferentes para orientación vertical/horizontal
+- Para hacer más visuales los cambios en los diseños adaptative, el texto de los composables cambia
 - Banner cambia de posición automáticamente
 - Formularios se reorganizan según espacio disponible
 - Tres layouts: compact, medium, expanded
@@ -31,12 +32,12 @@ Aplicación Android desarrollada en **Kotlin con Jetpack Compose** que implement
 ### 📗 **Vista Vertical (Portrait)**
 | Login | Registro | Confirmación |
 |-------|----------|--------------|
-| <img src="screenshots/login_portrait.png" width="200"> | <img src="screenshots/signin_portrait.png" width="200"> | <img src="screenshots/confirmation_portrait.png" width="200"> |
+| <img src="screenshots/login_portrait.jpeg" width="200"> | <img src="screenshots/signin_portrait.jpeg" width="200"> | <img src="screenshots/confirmation_portrait.jpeg" width="200"> |
 
 ### 📗 **Vista Horizontal (Landscape)**
 | Login | Registro | Confirmación |
 |-------|----------|--------------|
-| <img src="screenshots/login_landscape.png" width="400"> | <img src="screenshots/signin_landscape.png" width="400"> | <img src="screenshots/confirmation_landscape.png" width="400"> |
+| <img src="screenshots/login_landscape.jpeg" width="400"> | <img src="screenshots/signin_landscape.jpeg" width="400"> | <img src="screenshots/confirmation_landscape.jpeg" width="400"> |
 
 ## 📖 Estructura del proyecto
 ```
