@@ -13,6 +13,7 @@ import com.example.loginresponsiveadaptative.view.components.BibliotecaBanner
 import com.example.loginresponsiveadaptative.view.components.ScreenOrientation
 import com.example.loginresponsiveadaptative.view.components.getWindowInfo
 import com.example.loginresponsiveadaptative.viewmodel.AdaptativeViewModel
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun LoginView(
@@ -109,67 +110,73 @@ fun LoginView(
     } else {
         // HORIZONTAL
         Row(modifier = modifier.fillMaxSize()) {
-            // Banner a la izquierda
-            Box(modifier = Modifier.weight(0.3f).fillMaxHeight()) {
+            // Banner
+            Box(modifier = Modifier.weight(0.25f).fillMaxHeight()) {
                 BibliotecaBanner()
             }
 
-            // Formulario a la derecha
             Column(
-                modifier = Modifier.weight(0.7f).fillMaxHeight().padding(32.dp),
+                modifier = Modifier
+                    .weight(0.75f)
+                    .fillMaxHeight()
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("Biblioteca Digital", style = MaterialTheme.typography.headlineMedium)
-                Spacer(Modifier.height(32.dp))
-
-                Column(modifier = Modifier.fillMaxWidth(0.8f)) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(0.9f)
+                ) {
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
                         label = { Text("Email") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
                     )
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
                         label = { Text("Contraseña") },
                         modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = PasswordVisualTransformation()
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
                     )
 
                     if (mensajeError.isNotEmpty()) {
                         Text(
                             text = mensajeError,
                             color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.padding(top = 8.dp)
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(top = 4.dp)
                         )
                     }
                 }
 
-                Spacer(Modifier.height(48.dp))
+                Spacer(Modifier.height(16.dp))
 
-                Column(modifier = Modifier.fillMaxWidth(0.6f)) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Button(
                         onClick = { navController.navigate(Routes.Signin.route) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Crear cuenta nueva")
+                        Text("Crear cuenta")
                     }
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     OutlinedButton(
                         onClick = {
                             loginViewModel.insertarComponentesLogin(email, password)
-
                             if (!loginViewModel.camposCompletosLogin()) {
-                                mensajeError = "Completa todos los campos"
+                                mensajeError = "Completa campos"
                             } else if (!loginViewModel.verificarUsuarioLogin()) {
-                                mensajeError = "Email o contraseña incorrectos"
+                                mensajeError = "Credenciales incorrectas"
                             } else {
                                 mensajeError = "¡Login correcto!"
                             }
